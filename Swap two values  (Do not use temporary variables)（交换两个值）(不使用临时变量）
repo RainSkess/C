@@ -1,0 +1,13 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+int main()
+{
+	int num1 = 5;
+	int num2 = 8;
+	num1 = num2 + num1;
+	num2 = num1 - num2;
+	num1 = num1 - num2;
+	printf("num1和num2的值为%d %d\n", num1, num2);
+	return 0;
+}
