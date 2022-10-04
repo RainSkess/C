@@ -1,0 +1,33 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<stdio.h>
+
+int main()
+{
+	int a = 0;
+	int b = 0;
+	int c = 0;
+	int d = 0;
+	printf("请输入三个数(please enter three numbers)：\n");
+	scanf("%d %d %d", &a, &b, &c);
+	if (b > a)
+	{
+		d = b;
+		b = a;
+		a = d;
+	}
+	if (c > a)
+	{
+		d = c;
+		c = a;
+		a = d;
+	}
+	if (c > b)
+	{
+		d = c;
+		c = b;
+		b = d;
+	}
+	printf("从大到小(from big to small)：%d %d %d\n", a, b, c);
+	return 0;
+}
