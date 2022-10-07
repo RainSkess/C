@@ -1,0 +1,17 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<stdio.h>
+
+int main()
+{
+	int a = 0;
+	int b = 0;
+	int c = 0;
+	int d = 0;
+	scanf("%d %d", &a, &b);
+	c = a / b;
+	d = a % b;
+	printf("merchant（商）：%d\n", c);
+	printf("remainder（余数）：%d\n", d);
+	return 0;
+}
