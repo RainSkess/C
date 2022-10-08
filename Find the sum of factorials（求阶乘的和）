@@ -1,0 +1,38 @@
+Troblesome edition
+#include<stdio.h>
+
+int main()
+{
+	int a = 0;
+	int n = 0;
+	int sum = 0;
+	int ret = 1;
+	for (n = 1; n <= 10; n++)
+	{
+		ret = 1;
+		for (a =1; a <= n; a++)
+		{
+			ret = ret * a;
+		}
+		sum = sum + ret;
+	}
+	printf("sum = %d\n", sum);
+	return 0;
+}
+
+Lite
+#include<stdio.h>
+
+int main()
+{
+	int n = 0;
+	int sum = 0;
+	int ret = 1;
+	for (n = 1; n <= 10; n++)
+	{
+		ret = ret * n;
+		sum = sum + ret;
+	}
+	printf("sum = %d\n", sum);
+	return 0;
+}
