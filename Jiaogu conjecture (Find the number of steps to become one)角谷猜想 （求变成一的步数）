@@ -1,0 +1,25 @@
+#include<stdio.h>
+#define _CRT_SECURE_NO_WARNINGS
+
+
+int main()
+{
+	int n = 1233;
+	int count = 0;
+	while (n != 1)
+	{
+		if (n % 2 == 0)
+		{
+			n /= 2;
+			count++;
+		}
+		else
+		{
+			n = 3 * n + 1;
+			n /= 2;
+			count++;
+		}
+	}
+	printf("步数(steps)：%d\n", count);
+	return 0; 
+}
