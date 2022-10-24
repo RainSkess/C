@@ -1,0 +1,8 @@
+#include<stdio.h>
+
+int main()
+{
+	int ret = printf("Hello World!");
+	printf("\n%d\n", ret);
+	return 0;
+}
