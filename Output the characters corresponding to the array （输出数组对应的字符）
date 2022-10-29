@@ -1,0 +1,14 @@
+#include<stdio.h>
+
+int main()
+{
+	int arr[] = { 73, 32, 99, 97,110, 32 };
+	int a = 0;
+	int sz = sizeof(arr) / sizeof(arr[0]);
+	while (a < sz)
+	{
+		printf("%c ", arr[a]);
+		a++;
+	}
+	return 0;
+}
