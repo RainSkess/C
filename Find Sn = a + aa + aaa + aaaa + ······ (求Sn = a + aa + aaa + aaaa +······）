@@ -1,0 +1,22 @@
+#include<stdio.h>
+
+int main()
+{
+	int a = 0;
+	int n = 0;
+	int temp = 0;
+	int Sn = 0;
+	int i = 0;
+	printf("请输入一个数(please enter a number)：");
+	scanf("%d", &a);
+	printf("\n");
+	printf("请说明计算几项(please specify the calculation items)：");
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+	{
+		temp = temp * 10 + a;
+		Sn += temp;
+	}
+	printf("%d\n", Sn);
+	return 0;
+}
