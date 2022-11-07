@@ -1,0 +1,27 @@
+#include<stdio.h>
+
+int Fib(int n)
+{
+	int result = 1;
+	int pre_result = 1;
+	int next_older_result = 0;
+	while (n > 2)
+	{
+		next_older_result = pre_result;
+		pre_result = result;
+		result = next_older_result + pre_result;
+		n--;
+	}
+	return result;
+}
+
+int main()
+{
+	int n = 0;
+	scanf("%d", &n);
+	int sum = Fib(n);
+	printf("%d", sum);
+	return 0;
+}
+
+
