@@ -1,0 +1,85 @@
+#include<stdio.h>
+
+
+
+int Strlen(char* arr)
+
+{
+
+if (*arr == '\0')
+
+{
+
+return 0;
+
+}
+
+else
+
+{
+
+return 1 + Strlen(arr + 1);
+
+}
+
+}
+
+
+
+int main()
+
+{
+
+char arr[] = "abcde";
+
+int length =Strlen(arr);
+
+printf("%d", length);
+
+return 0;
+
+}
+
+
+
+
+
+#include<stdio.h>
+
+
+
+int Strlen(char* arr)
+
+{
+
+int count = 0;
+
+while (*arr != '\0')
+
+{
+
+count += 1;
+
+arr += 1;
+
+}
+
+return count;
+
+}
+
+
+
+int main()
+
+{
+
+char arr[] = "abcde";
+
+int length =Strlen(arr);
+
+printf("%d", length);
+
+return 0;
+
+}
