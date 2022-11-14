@@ -1,0 +1,17 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+int main()
+{
+	int n = 0;
+	int count = 0;
+	printf("请输入一个整数(please enter a number:)：");
+	scanf("%d", &n);
+	while (n)
+	{
+		count++;
+		n = n & (n - 1);
+	}
+	printf("%d", count);
+	return 0;
+}
