@@ -1,0 +1,27 @@
+void reverse_string(char* arr)
+{
+	int len = strlen(arr);
+	char tmp = *arr;
+	*arr = *(arr + len - 1);
+
+	*(arr + len - 1) = '\0';
+	if (strlen(arr + 1) >= 2)
+		reverse_string(arr + 1);
+
+	*(arr + len - 1) = tmp;
+}
+
+#include<stdio.h>
+
+int main()
+{
+	char arr[] = "abcdef";
+	int sz = sizeof(arr) / sizeof(arr[0]);
+	int i = 0;
+	reverse_string(arr);
+	for (i = 0; i < sz - 1; i++)
+	{
+		printf("%c", arr[i]);
+	}
+	return 0;
+}
