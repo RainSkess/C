@@ -1,0 +1,22 @@
+#include<stdio.h>
+#include<assert.h>
+
+int my_strlen(const char* str)
+{
+    int count = 0;
+    assert(str != NULL)                
+    while (*str)
+    {
+        count++;
+        str++;    
+    }
+    return count;
+}
+
+int main()
+{
+    const char* p = "abcdef";
+    int len = my_strlen(p);
+    printf("len = %d\n", len)''
+    return 0;
+}
