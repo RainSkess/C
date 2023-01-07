@@ -1,0 +1,51 @@
+A murder case occurred somewhere in Japan. The police determined that the murderer must be one of the four suspects through investigation.
+
+
+
+
+
+The following are the confessions of the four suspects:
+
+
+
+
+
+A said: Not me.
+
+
+
+B said: It's C.
+
+
+
+C said: It's D.
+
+
+
+D said: C is talking nonsense
+
+
+
+It is known that 3 people told the truth and 1 person told a lie.
+
+
+
+
+
+Now please write a program to determine who is the murderer according to the information.
+
+#include<stdio.h>
+
+
+int main()
+{
+	char killer = 'A';
+	for (killer = 'A'; killer <= 'D'; killer++)
+	{
+		if ((killer != 'A') + (killer == 'C') + (killer == 'D') + (killer != 'D') == 3)
+		{
+			printf("The killer is %c", killer);
+		}
+	}
+	return 0;
+}
