@@ -1,0 +1,19 @@
+void Rev(int* right, int* left)
+{
+        while (right > left)
+        {
+            int tmp = *right;
+            *right = *left;
+            *left = tmp;
+            right--;
+            left++;
+        }
+}
+void rotate(int* nums, int numsSize, int k){
+    k = k % numsSize;
+    Rev(nums+numsSize - 1, nums+numsSize - k);
+    Rev(nums+numsSize - k - 1, nums);
+    Rev(nums+numsSize - 1, nums);
+}
+
+https://leetcode.cn/problems/rotate-array/description/
