@@ -1,0 +1,48 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+struct ListNode* removeElements(struct ListNode* head, int val){
+   if (head == NULL)
+   {
+       return NULL;
+   }
+   else 
+   {
+       struct ListNode* prev = NULL;
+       struct ListNode* cur = head;
+       while (cur)
+       {
+           
+           if (cur->val != val)
+           {
+               prev = cur;
+               cur = cur->next;
+               
+           }
+           else
+           {
+               if (prev == NULL)
+               {
+                    head = cur->next;
+                    free(cur);
+                    cur = head;
+               }
+               else
+               { 
+                   prev->next = cur->next;
+                   free(cur);
+                   cur = prev->next;
+               }
+           }  
+       }
+       return head;
+   }
+}
+
+https://leetcode.cn/problems/remove-linked-list-elements/description/
