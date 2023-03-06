@@ -1,0 +1,83 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+//尽量不能出现中间插入或者中间删除的代码，就像写个单链表一样，不值得。
+
+struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2){
+    // if (list1 == NULL)//有一个链表为空时，另一个链表可能不为空，所以返回另一个链表
+    //     return list2;
+    // if (list2 == NULL)
+    //     return list1;
+    // struct ListNode* cur1 = list1, *cur2 = list2;
+    // struct ListNode* head = NULL, *tail = NULL;
+    // while (cur1 && cur2)
+    // {
+    //     if (cur1->val > cur2->val)
+    //     {
+    //         if (head == NULL)//这里是判断是否有一个节点的地址赋给了指针，没有的话就找不到指向节点的地址了
+    //             head = tail = cur2;
+    //         else
+    //         {
+    //             tail->next = cur2;
+    //             tail = cur2;
+    //         }
+    //         cur2 = cur2->next;//不管head是什么，cur2必然要改变。
+    //     }
+    //     else
+    //     {
+    //         if (head == NULL)
+    //         {
+    //                 head = tail = cur1;
+    //         }
+    //         else 
+    //         {
+    //             tail->next = cur1;
+    //             tail = cur1;
+    //         }
+    //         cur1 = cur1->next;
+    //     }
+    // }
+    // if (cur1)//结束循环时并不知道哪个为空，所以都要判断。
+    // {        //而传地址时只需要传一个就行了，因为一个有后面的地址
+    //     tail->next = cur1;
+    // }
+    // if (cur2)
+    // {
+    //     tail->next = cur2;
+    // }
+    // return head;//最终返回最初的地址。
+
+
+    
+    // struct ListNode* cur1 = list1, *cur2 = list2, *tail = NULL, *guard = NULL;
+    // guard = tail = (struct ListNode*)malloc(sizeof(struct ListNode));//哨兵位最好申请内存空间
+    // tail->next = NULL;//不加这个，就是野指针
+    // while (cur1 && cur2)
+    // {
+    //     if (cur1->val > cur2->val)
+    //     {
+    //         tail->next = cur2;
+    //         tail = cur2;
+    //         cur2 = cur2->next;
+    //     }
+    //     else
+    //     {
+    //         tail->next = cur1;
+    //         tail = cur1;
+    //         cur1 = cur1->next;
+    //     }
+    // }
+    // if (cur1)
+    //     tail->next = cur1;
+    // if (cur2)
+    //     tail->next = cur2;
+    // struct ListNode* head = guard->next;//要记得释放申请的内存
+    // free(guard);
+    // return head;
+}
+
+https://leetcode.cn/problems/merge-two-sorted-lists/description/
