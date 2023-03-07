@@ -1,0 +1,41 @@
+/*
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};*/
+class Partition {
+public://哨兵就是好
+    ListNode* partition(ListNode* pHead, int x) {
+    struct ListNode* gguard, *gtail;
+    struct ListNode*lguard, *ltail;
+    struct ListNode*cur;
+    gguard = gtail = (struct ListNode*)malloc(sizeof(struct ListNode));
+    lguard = ltail = (struct ListNode*)malloc(sizeof(struct ListNode));
+    cur = pHead;
+    gtail->next = ltail->next = NULL;//出现一边倒的情况时，好处理
+    while (cur)
+    {
+        if (cur->val < x)
+        {
+            ltail->next = cur;
+            ltail = cur;
+            cur = cur->next;
+        }
+        else
+        {
+            gtail->next = cur;
+            gtail = cur;
+            cur = cur->next;
+        } 
+        
+    }
+    ltail->next = gguard->next;
+    gtail->next = NULL;//如果不置为空，就可能形成环
+    struct ListNode* head = lguard->next;
+    free(lguard);//申请完空间记得及时释放
+    free(gguard);
+    return head;
+    }
+    
+};//一定要加上冒号，不加冒号报错，烦死了
