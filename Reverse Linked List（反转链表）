@@ -1,0 +1,40 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+// struct ListNode* reverseList(struct ListNode* head){
+//      if (head == NULL)//首先判断语句放在最开始，要不然next变量就是野指针。
+//         return NULL;
+//     struct ListNode* prev = NULL, *cur = head, *next = head->next;
+   
+//     while (cur)
+//     {    //这里的思路就是将节点指向的地址反转。
+//         cur->next = prev;//这是地址调换
+       
+//         prev = cur;//要进行往后走。
+//         cur = next;
+//         if(next)//这里会出现next为空，所以加个判断放置野指针。
+//             next = cur->next;
+//     }
+//     return prev;//作为第一个节点返回。
+// }
+
+struct ListNode* reverseList(struct ListNode* head){//头插的方法
+    struct ListNode* newhead = NULL, *cur = head;
+    while (cur)
+    {//首先让next保存下个节点的地址
+     //然后将节点的地址互相调换，将cur指向下个节点
+        struct ListNode* next = cur->next;
+        cur->next = newhead;
+        newhead = cur;
+        cur = next;
+    }
+    return newhead;
+}
+
+https://leetcode.cn/problems/reverse-linked-list/description/
