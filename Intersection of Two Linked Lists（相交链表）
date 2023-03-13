@@ -1,0 +1,49 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+ //思路：首先求出两个链表的长度，然后让长的链表先走差距步，最后一起走，判断相同的地址则返回
+struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
+    struct ListNode* tailA = headA, *tailB = headB;
+    int lenA = 0;
+    int lenB = 0;
+    //求出两个链表的长度
+    while (tailA)
+    {
+        lenA++;
+        tailA = tailA->next;
+    }
+    while (tailB)
+    {
+        lenB++;
+        tailB = tailB->next;
+    }
+    //求出差距步
+    int gap = abs(lenA - lenB);
+    //让长的链表走差距步
+    struct ListNode* longlist = headA, *shortlist = headB;
+    if (lenA < lenB)
+    {
+        longlist = headB;
+        shortlist = headA;
+    }
+    while (gap--)
+    {
+        longlist = longlist->next;
+    }
+    //最后一起走，判断指向的节点地址是否相等
+    while (longlist != shortlist)
+    {
+        longlist = longlist->next;
+        shortlist = shortlist->next;
+    }
+    return longlist;
+      
+
+
+}
+https://leetcode.cn/problems/intersection-of-two-linked-lists/description/
