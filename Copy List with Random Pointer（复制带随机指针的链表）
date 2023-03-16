@@ -1,0 +1,60 @@
+/**
+ * Definition for a Node.
+ * struct Node {
+ *     int val;
+ *     struct Node *next;
+ *     struct Node *random;
+ * };
+ */
+
+struct Node* copyRandomList(struct Node* head) {
+    //1. 每个节点后面复制一个新节点
+	struct Node* cur = head;
+    while (cur)
+    {
+        struct Node* next = cur->next;
+        struct Node* copy = (struct Node*)malloc(sizeof(struct Node));
+        copy->val = cur->val;//复制的节点的数据与前一个相等
+        copy->next = next;//复制节点next指向下一个节点
+        cur->next = copy;//前一个节点next指向新的节点
+        cur = next;//cur指向下一个节点
+    }
+    //2. 复制节点的random指向前节点的random的next
+    cur = head;
+    while (cur)
+    {
+        struct Node* copy = cur->next;
+        if (cur->random == NULL)//如果指向空，那么复制节点也指向空
+        {
+            copy->random = NULL;
+        }
+        else
+        {
+            copy->random = cur->random->next;
+        }
+        cur = copy->next;//节点换下一个
+    }
+    //3. 将复制的节点做成新链表，并将旧链表还原
+    struct Node* copyhead = NULL;
+    struct Node* copytail = NULL;
+    cur = head;
+    while (cur)
+    {
+        struct Node* copy = cur->next;
+        struct Node* next = copy->next;
+        if (copyhead == NULL)//一开始并不知道新链表是否有指向的内容
+        {
+            copyhead = copytail = copy;
+        }
+        else
+        {
+            copytail->next = copy;
+            copytail = copy;
+        }
+        cur->next = next;//及时将旧链表还原
+        cur = next;//换一个下个节点
+    }
+    return copyhead;
+}
+
+https://leetcode.cn/problems/copy-list-with-random-pointer/description/
