@@ -1,0 +1,137 @@
+#include<stdio.h>
+#include<assert.h>
+#include<stdbool.h>
+#include<malloc.h>
+#include<stdlib.h>
+
+typedef int STDataType;
+#define CAPACITY 4
+
+typedef struct Stack {
+	int* s;
+	int top;
+	int capacity;
+}ST;
+
+void STInit(ST* ps);//栈的初始化
+void STDestroy(ST* ps);//栈的销毁
+bool STEmpty(ST* ps);//判断栈是否为空
+void STPush(ST* ps, STDataType x);//进行插入数据
+void STPop(ST* ps);//删除数据
+STDataType STTop(ST* ps);//寻找栈顶的数据
+int STSize(ST* ps);//查看栈有几个元素
+
+
+void STInit(ST* ps)
+{
+	assert(ps);//栈不能为空
+	ps->s = (STDataType*)malloc(sizeof(STDataType) * CAPACITY);//malloc开辟空间
+	if (ps->s == NULL)
+	{
+		perror("malloc fail");//开辟失败报错
+		return;
+	}
+	ps->top = 0;//将top置为0，代表数据的个数。赋值为多少无所谓，看个人习惯
+	ps->capacity = CAPACITY;//将容量先置为空
+}
+
+bool STEmpty(ST* ps)
+{
+	assert(ps);
+	return ps->top == 0;
+}
+
+void STDestroy(ST* ps)
+{
+	assert(ps);
+
+	free(ps->s);//释放空间
+	ps->s = NULL;//同时将指针置为空
+    ps->top = 0;
+    ps->capacity = 0;
+}
+
+void STPush(ST* ps, STDataType x)
+{
+	assert(ps);
+	//要先检查容量，判断为不为满，满了进行扩容
+	//如果扩容步骤使用很多次，就可以写个扩容函数，只有一次就没必要
+	if (ps->top == ps->capacity)
+	{
+		STDataType* new = (STDataType*)realloc(ps->s, sizeof(STDataType) * ps->capacity * 2);
+		if (new == NULL)
+		{
+			perror("realloc fail");
+			return;
+		}
+		ps->s = new;
+		ps->capacity *= 2;
+	}
+	ps->s[ps->top] = x;
+	ps->top++;
+}
+
+void STPop(ST* ps)
+{
+	assert(ps);
+	assert(!STEmpty(ps));//如果栈为空的话，就不能进行删除
+	ps->top--;//直接将个数减一就行了
+}
+
+STDataType STTop(ST* ps)
+{
+	assert(ps);
+    assert(!STEmpty(ps));
+	return ps->s[ps->top - 1];//返回元素减一的数据
+}
+
+int STSize(ST* ps)
+{
+	assert(ps);
+	return ps->top;
+}
+//申请了动态空间要返回操作系统
+//思路：遇到左括号就进栈，遇到右括号进行出栈匹配，若匹配失败返回false，直至字符指针指向空
+bool isValid(char * s){
+    ST st;
+    STInit(&st);
+    
+    while (*s)
+    {
+        //遇到左括号进栈
+        if (*s == '('
+         || *s == '['
+         || *s == '{')
+         {
+             STPush(&st, *s);
+         }
+         //遇到右括号进栈
+        else
+        {
+            //如果第一个符号为右括号则直接返回false
+            if (STEmpty(&st))
+            {
+                STDestroy(&st);
+                return false;
+            }
+            //栈顶元素与右括号进行匹配
+            if ((STTop(&st) != '(' && *s == ')')
+              ||(STTop(&st) != '[' && *s == ']')
+              ||(STTop(&st) != '{' && *s == '}'))
+              {
+                  STDestroy(&st);
+                  return false;
+              }
+              //匹配成功就要删除栈顶元素，指向下一个元素
+            STPop(&st);
+           
+        }
+        s++;
+    }  
+    //如果只有一个左括号，就要判断栈里面是否为空，判空函数类型为bool类型
+    //为空返回true，正好是正确的
+    //不为空返回false，是错误的
+    bool ret = STEmpty(&st);
+    STDestroy(&st);
+    return ret;
+}
