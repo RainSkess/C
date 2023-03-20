@@ -1,0 +1,93 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include"Queue.h"
+
+void QueueInit(Queue* pq)
+{
+	assert(pq);
+	pq->head = pq->tail = NULL;//队列的初始化将两个指针置为空
+	pq->size = 0;//有效元素为0
+}
+
+void QueueDestroy(Queue* pq)
+{
+	assert(pq);
+	//将一个结点指针指向头节点，作为循环的条件
+	QNode* cur = pq->head;
+	while (cur)
+	{
+		QNode* del = cur;//一个要删除的结点
+		free(del);
+		cur = cur->next;//指向下一个结点
+	}
+	//销毁时及时将两个指针置为空，避免野指针的出现
+	pq->head = pq->tail = NULL;
+	pq->size = 0;
+}
+
+void QueuePush(Queue* pq, QDataType x)
+{
+	assert(pq);
+	QNode* newnode = (QNode*)malloc(sizeof(QNode));//malloc申请新的结点
+	if (newnode == NULL)
+	{
+		perror("malloc fail");//申请失败报错并返回
+		return;
+	}
+	//如果为空队列，那么就要将指针同时指向新的结点
+	if (pq->head == NULL)
+	{
+		pq->head = pq->tail = newnode;
+	}
+	else//这里没加else语句，那么if执行了的话就会混乱
+	{
+		pq->tail->next = newnode;
+		pq->tail = newnode;//同时将尾指针指向新的结点
+	}
+	//将尾结点的next指向新的结点
+	newnode->data = x;//新的结点进行赋值
+	pq->size++;//有效元素进行加1
+}
+
+void QueuePop(Queue* pq)
+{
+	assert(pq);
+	assert(!QueueEmpty(pq));//空的队列就不能删除
+
+ 	QNode* del = pq->head;
+	pq->head = pq->head->next;//将头指针指向下个结点
+	free(del);//释放空间
+	del = NULL;
+	//这里要考虑只有一个节点的时候，tail可能会是野指针
+	if (pq->head == NULL)
+	{
+		pq->tail = NULL;
+	}
+	pq->size--;//有效元素减1
+}
+
+bool QueueEmpty(Queue* pq)
+{
+	assert(pq);
+	return pq->size == 0;
+}
+
+int QueueSize(Queue* pq)
+{
+	assert(pq);
+	return pq->size;
+}
+
+QDataType QueueFront(Queue* pq)
+{
+	assert(pq);
+	assert(!QueueEmpty(pq));
+	return pq->head->data;
+}
+
+QDataType QueueBack(Queue* pq)
+{
+	assert(pq);
+	assert(!QueueEmpty(pq));
+	return pq->tail->data;
+}
