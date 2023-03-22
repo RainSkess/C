@@ -1,0 +1,170 @@
+#include<stdio.h>
+#include<assert.h>
+#include<stdbool.h>
+#include<malloc.h>
+#include<stdlib.h>
+
+typedef int STDataType;
+#define CAPACITY 4
+
+typedef struct Stack {
+	int* s;
+	int top;
+	int capacity;
+}ST;
+
+void STInit(ST* ps);//栈的初始化
+void STDestroy(ST* ps);//栈的销毁
+bool STEmpty(ST* ps);//判断栈是否为空
+void STPush(ST* ps, STDataType x);//进行插入数据
+void STPop(ST* ps);//删除数据
+STDataType STTop(ST* ps);//寻找栈顶的数据
+int STSize(ST* ps);//查看栈有几个元素
+
+void STInit(ST* ps)
+{
+	assert(ps);//栈不能为空
+	ps->s = (STDataType*)malloc(sizeof(STDataType) * CAPACITY);//malloc开辟空间
+	if (ps->s == NULL)
+	{
+		perror("malloc fail");//开辟失败报错
+		return;
+	}
+	ps->top = 0;//将top置为0，代表数据的个数。赋值为多少无所谓，看个人习惯
+	ps->capacity = CAPACITY;//将容量先置为空
+}
+
+bool STEmpty(ST* ps)
+{
+	assert(ps);
+	return ps->top == 0;
+}
+
+void STDestroy(ST* ps)
+{
+	assert(ps);
+	free(ps->s);//释放空间
+	ps->s = NULL;//同时将指针置为空
+	ps->top = 0;
+	ps->capacity = 0;
+}
+
+void STPush(ST* ps, STDataType x)
+{
+	assert(ps);
+	//要先检查容量，判断为不为满，满了进行扩容
+	//如果扩容步骤使用很多次，就可以写个扩容函数，只有一次就没必要
+	if (ps->top == ps->capacity)
+	{
+		STDataType* new = (STDataType*)realloc(ps->s, sizeof(STDataType) * ps->capacity * 2);
+		if (new == NULL)
+		{
+			perror("realloc fail");
+			return;
+		}
+		ps->s = new;
+		ps->capacity *= 2;
+        
+	}
+	ps->s[ps->top] = x;
+	ps->top++;
+}
+
+void STPop(ST* ps)
+{
+	assert(ps);
+	assert(!STEmpty(ps));//如果栈为空的话，就不能进行删除
+	ps->top--;//直接将个数减一就行了
+}
+
+STDataType STTop(ST* ps)
+{
+	assert(ps);
+	assert(!STEmpty(ps));
+	return ps->s[ps->top - 1];//返回元素减一的数据
+}
+
+int STSize(ST* ps)
+{
+	assert(ps);
+	return ps->top;
+}
+
+typedef struct {
+    ST emptyst;
+    ST nonemptyst;
+} MyQueue;
+
+//队列的初始化
+MyQueue* myQueueCreate() {
+    MyQueue* newQueue = (MyQueue*)malloc(sizeof(MyQueue));
+    if (newQueue == NULL)
+    {
+        perror("malloc fail");
+        return NULL;
+    }
+    //对栈进行初始化
+    STInit(&newQueue->emptyst);
+    STInit(&newQueue->nonemptyst);
+    return newQueue;
+}
+//固定一个栈插入数据
+void myQueuePush(MyQueue* obj, int x) {
+
+        STPush(&obj->nonemptyst, x);
+    
+}
+
+int myQueuePop(MyQueue* obj) {
+    //如果出数据的栈为空，那么就要移除数据
+    if (STEmpty(&obj->emptyst))//不加这个条件就会顺序混乱
+    {
+         while (STSize(&obj->nonemptyst))
+        {
+            STPush(&obj->emptyst, STTop(&obj->nonemptyst));
+            STPop(&obj->nonemptyst);
+        }
+    }
+   //不为空，直接出栈
+    int top = STTop(&obj->emptyst);
+    STPop(&obj->emptyst);
+    return top;
+}
+
+int myQueuePeek(MyQueue* obj) {
+    //出数据的栈为空，那么就要进行移数据
+    if (STEmpty(&obj->emptyst))
+    {
+        while (STSize(&obj->nonemptyst))
+        {
+            STPush(&obj->emptyst, STTop(&obj->nonemptyst));
+            STPop(&obj->nonemptyst);
+        }
+    }
+    
+    return STTop(&obj->emptyst);
+}
+
+bool myQueueEmpty(MyQueue* obj) {
+    return STEmpty(&obj->emptyst) && STEmpty(&obj->nonemptyst);
+}
+
+void myQueueFree(MyQueue* obj) {
+    STDestroy(&obj->emptyst);
+    STDestroy(&obj->nonemptyst);
+    free(obj);
+}
+
+/**
+ * Your MyQueue struct will be instantiated and called as such:
+ * MyQueue* obj = myQueueCreate();
+ * myQueuePush(obj, x);
+ 
+ * int param_2 = myQueuePop(obj);
+ 
+ * int param_3 = myQueuePeek(obj);
+ 
+ * bool param_4 = myQueueEmpty(obj);
+ 
+ * myQueueFree(obj);
+*/
