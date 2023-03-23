@@ -1,0 +1,97 @@
+typedef struct {
+    int* s;
+    int front;
+    int rear;
+    int k;
+} MyCircularQueue;
+
+//创建循环队列
+MyCircularQueue* myCircularQueueCreate(int k) {
+    MyCircularQueue* obj = (MyCircularQueue*)malloc(sizeof(MyCircularQueue));
+    if (obj == NULL)
+    {
+        perror("malloc fail");
+        return NULL;
+    }
+    //创建数组时，多创建一个空间，以便进行循环
+    obj->s = (int*)malloc(sizeof(int) * (k + 1));
+    if (obj->s == NULL)
+    {
+        perror("malloc fail");
+        return NULL;
+    }
+    //将头指针和尾指针置为空，将长度记住
+    obj->front = obj->rear = 0;
+    obj->k = k;
+    return obj;
+}
+//如果头指针和尾指针相等，代表为空
+bool myCircularQueueIsEmpty(MyCircularQueue* obj) {
+    return obj->rear == obj->front;
+}
+//为满的情况：1. rear在front前面，直接进行加1是否相等，相等则满了
+//2. rear在front后面，考虑rear在队尾，那么要将rear指向下标0，就要进行模运算，相等就满了
+bool myCircularQueueIsFull(MyCircularQueue* obj) {
+    return (obj->rear + 1) % (obj->k + 1) == obj->front;
+}
+
+bool myCircularQueueEnQueue(MyCircularQueue* obj, int value) {
+    //插入元素，如果为满就返回假
+    if (myCircularQueueIsFull(obj))
+        return false;
+    obj->s[obj->rear] = value;
+    //让rear指向下个位置，考虑rear在队尾，那么就要进行模运算
+    obj->rear = (obj->rear + 1) % (obj->k + 1);  
+    return true;
+}
+
+bool myCircularQueueDeQueue(MyCircularQueue* obj) {
+    //删除元素，如果为空就返回假
+    if (myCircularQueueIsEmpty(obj))
+        return false;
+    //要将front指向下一个，但是要考虑front在队尾，进行模运算
+    obj->front = (obj->front + 1) % (obj->k + 1);
+    return true;
+}
+
+int myCircularQueueFront(MyCircularQueue* obj) {
+    //队列为空返回-1
+    if (myCircularQueueIsEmpty(obj))
+        return -1;
+    return obj->s[obj->front];
+}
+
+int myCircularQueueRear(MyCircularQueue* obj) {
+    //队列为空返回-1
+    if (myCircularQueueIsEmpty(obj))
+        return -1;
+    //考虑rear在队头的情况，在队头就赋值为队尾元素，其它情况就返回前一个元素
+    int tail = obj->rear == 0?obj->s[obj->k]:obj->s[obj->rear - 1];
+    return tail;
+}
+
+
+
+void myCircularQueueFree(MyCircularQueue* obj) {
+    //申请两个空间就要释放两个空间
+    free(obj->s);
+    free(obj);
+}
+
+/**
+ * Your MyCircularQueue struct will be instantiated and called as such:
+ * MyCircularQueue* obj = myCircularQueueCreate(k);
+ * bool param_1 = myCircularQueueEnQueue(obj, value);
+ 
+ * bool param_2 = myCircularQueueDeQueue(obj);
+ 
+ * int param_3 = myCircularQueueFront(obj);
+ 
+ * int param_4 = myCircularQueueRear(obj);
+ 
+ * bool param_5 = myCircularQueueIsEmpty(obj);
+ 
+ * bool param_6 = myCircularQueueIsFull(obj);
+ 
+ * myCircularQueueFree(obj);
+*/
