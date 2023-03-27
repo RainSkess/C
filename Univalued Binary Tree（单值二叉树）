@@ -1,0 +1,25 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+//如果根和左右子树相同，那么就继续比较，直到为空的时候
+bool isUnivalTree(struct TreeNode* root){
+    //根为空，就是true
+    if(root == NULL)
+        return true;
+    //当左子树存在时，根与左子树比较，不相等返回false
+    if (root->left && root->left->val != root->val)
+        return false;
+    //当右子树存在时，根与右子树比较，不相等返回false
+    if (root->right && root->right->val != root->val)
+        return false;
+    //将根的位置指向左右子树
+    return isUnivalTree(root->left) && isUnivalTree(root->right);
+}
+
+https://leetcode.cn/problems/univalued-binary-tree/
