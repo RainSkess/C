@@ -1,0 +1,29 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+//思路：根的左右子树相互交换就行了，遇到空就返回。
+struct TreeNode* invertTree(struct TreeNode* root){
+    //如果根为空，返回空
+    if (root == NULL)
+        return NULL;
+    //如果左右子树有一个为空，那么也要交换。
+    //这个代码有点挫，可以换一种，
+    //struct TreeNode* tmp = invertTree(root->left);
+    //root->left = invertTree(root->right);
+    //root->right = tmp;
+    struct TreeNode* left = invertTree(root->left);
+    struct TreeNode* right = invertTree(root->right);
+    root->left = right;
+    root->right = left;
+    return root;
+}
+
+
+
+https://leetcode.cn/problems/invert-binary-tree/、
