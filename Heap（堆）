@@ -1,0 +1,145 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+
+void HeapInit(HP* php)//堆的初始化
+{
+	assert(php);
+	php->a = (HPDataType*)malloc(sizeof(HPDataType) * 4);//先申请四个元素空间
+	if (php->a == NULL)
+	{
+		perror("malloc fail");
+		return;
+	}
+	php->size = 0;
+	php->capacity = 4;//令容量等于4
+}
+
+//建大堆
+void HeapPush(HP* php, HPDataType x)//堆的插入数据
+{
+	assert(php);
+	//扩容操作
+	if (php->size == php->capacity)
+	{
+		HPDataType* newheap = (HPDataType*)realloc(php->a, sizeof(HPDataType) * php->capacity * 2);
+		if (newheap == NULL)
+		{
+			perror("realloc fail");
+			return;
+		}
+		php->a = newheap;
+		php->capacity *= 2;
+	}
+	php->a[php->size] = x;
+	php->size++;
+	AdjustUp(php->a, php->size - 1);//插入元素进行向上调整
+}
+
+void Swap(HPDataType* p1, HPDataType* p2)//交换函数
+{
+	HPDataType tmp = *p1;
+	*p1 = *p2;
+	*p2 = tmp;
+}
+
+
+void AdjustUp(HPDataType* a, int child)//向上调整数据
+{
+	//进行断言，数组不能为空
+	assert(a);
+	int parent = (child - 1) / 2;//找到父母的位置
+	while (child)//这里不用parent作为条件，改小堆好改
+	{
+		if (a[child] > a[parent])//如果孩子比父母大，那么就交换
+		{
+			Swap(&a[child], &a[parent]);
+			child = parent;//将两个位置进行调换，继续比较
+			parent = (child - 1) / 2;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+bool HeapEmpty(HP* php)//判断堆是否为空
+{
+	return php->size == 0;
+}
+
+void HeapPop(HP* php)//堆的删除操作
+{
+	assert(php);
+	assert(!HeapEmpty(php));
+	//如果直接删除，进行排序会很乱，关系会乱掉，可以将堆顶和堆尾进行交换，然后将元素个数减1
+	Swap(&php->a[0], &php->a[php->size - 1]);
+	php->size--;
+	AdjustDown(php->a, php->size, 0);
+}
+
+//如果删除最后一个元素，那么就没有意义，删除堆顶就很有意义，然后再进行排序
+void AdjustDown(HPDataType* a, int n, int parent)
+{
+	assert(a);
+	int child = parent * 2 + 1;//找到孩子的位置
+	while (child < n)//当孩子指向位置超过了元素个数，那么就是没有元素
+	{
+		//找到两个孩子中大的那一个
+		if (child + 1 < n && a[child] < a[child + 1])//如果只有左孩子，就不能进行访问右孩子
+		{
+			++child;
+		}
+		//如果孩子比父母大，就要交换
+		if (a[child] > a[parent])
+		{
+			Swap(&a[child], &a[parent]);
+			parent = child;
+			child = parent * 2 + 1;//找到下个孩子
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+void HeapDestroy(HP* php)//堆的销毁
+{
+	assert(php);
+	assert(!HeapEmpty(php));
+	free(php->a);
+	php->size = php->capacity = 0;
+}
+
+HPDataType HeapTop(HP* php)//找到堆顶的元素
+{
+	assert(php);
+	assert(!HeapEmpty(php));
+	return php->a[0];
+}
+
+int HeapSize(HP* php)//返回元素个数
+{
+	assert(php);
+	return php->size;
+}
+
+void HeapCreat(HP* php, HPDataType* a, int n)//堆的构建
+{
+	assert(php);
+	assert(a);
+	php->a = (HPDataType*)malloc(sizeof(HPDataType) * n);
+	if (php->a == NULL)
+	{
+		perror("malloc fail");
+		return;
+	}
+	php->size = n;
+	php->capacity = n;
+
+	for (int i = (n - 2) / 2; i > 0; --i)
+	{
+		AdjustDown(php->a, n, i);
+	}
+}
