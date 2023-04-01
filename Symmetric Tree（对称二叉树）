@@ -1,0 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+bool _isSymmetric(struct TreeNode* leftroot, struct TreeNode* rightroot)
+{
+    //如果两个都为空，代表相同，作为返回条件
+    if (leftroot == NULL && rightroot == NULL)
+        return true;
+    //有一个为空另外一个不为空代表不是对称二叉树
+    if (leftroot == NULL || rightroot == NULL)
+        return false;
+    //不相同代表不是对是二叉树
+    if (leftroot->val != rightroot->val)
+        return false;
+    //判断条件要多写一个
+    return _isSymmetric(leftroot->left, rightroot->right) && _isSymmetric(leftroot->right,rightroot->left);
+}
+
+//跟判断相同二叉树差不多，只是多加了比较的对象
+//比较左树的左孩子是否与右树的右孩子相同，左树的右孩子是否与右树的左孩子相同
+bool isSymmetric(struct TreeNode* root){
+    //题目中说明了至少有一个结点，所以就不用判断root为空的情况了
+   return  _isSymmetric(root, root);
+}
+
+https://leetcode.cn/problems/symmetric-tree/description/?languageTags=c
