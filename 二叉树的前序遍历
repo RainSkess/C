@@ -1,0 +1,42 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+
+//计算树的结点数量
+int TreeSize(struct TreeNode* root)
+{
+	if (root == NULL)
+		return 0;
+	//进行调用左右子树，遇到NULL时返回
+	int leftSize = TreeSize(root->left);
+	int rightSize = TreeSize(root->right);
+	return leftSize + rightSize + 1;//自己也是数量中的一员，所以要加1
+}
+//前序遍历
+ void PreOrder(struct TreeNode* root, int* a, int* count)
+{
+    if (root == NULL)
+        return;
+    a[(*count)++] = root->val;//遍历的时候将进行赋值
+	PreOrder(root->left, a, count);
+	PreOrder(root->right, a, count);
+}
+
+int* preorderTraversal(struct TreeNode* root, int* returnSize){ 
+    *returnSize = TreeSize(root);//这个语句放在后面反而过不了
+    int* a = (int*)malloc(sizeof(int) * (*returnSize));
+    int count = 0;
+    PreOrder(root, a, &count);
+   
+    return a;
+}
+
+https://leetcode.cn/problems/binary-tree-preorder-traversal/
