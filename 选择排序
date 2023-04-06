@@ -1,0 +1,33 @@
+//选择排序（两个一起走）
+void SelectSort(int* a, int n)
+{
+	int left = 0;
+	int right = n - 1;
+	while (left < right)
+	{
+		int mini = left;
+		int maxi = right;
+		for (int i = left; i <= right; ++i)
+		{
+			if (a[mini] > a[i])
+			{
+				mini = i;
+			}
+			if (a[maxi] < a[i])
+			{
+				maxi = i;
+			}
+		}
+		//交换两个数
+		Swap(&a[left], &a[mini]);
+		//如果left等于maxi，那么就会交换回来
+		if (left == maxi)
+		{
+			maxi = mini;
+		}
+		Swap(&a[right], &a[maxi]);
+		++left;
+		--right;
+	}
+	
+}
