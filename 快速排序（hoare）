@@ -1,0 +1,132 @@
+int GetMidNumi(int* a, int left, int right)
+{
+	int mid = (left + right) / 2;
+	if (a[left] < a[right])
+	{
+		if (a[mid] < a[left])
+		{
+			return left;
+		}
+		else if (a[mid] < a[right])
+		{
+			return mid;
+		}
+		else
+		{
+			return right;
+		}
+	}
+	else//a[left] >= a[right]
+	{
+		if (a[mid] < a[right])
+		{
+			return right;
+		}
+		else if (a[mid] < a[left])
+		{
+			return mid;
+		}
+		else
+		{
+			return left;
+		}
+	}
+}
+
+//快速排序
+
+//hoare版本
+int QuickSort1(int* a, int left, int right)
+{
+	//关键值设置为左值，右边就要先走一步
+	
+	//错误做法1,陷入一种自己和自己调换，陷入死循环
+	/*int keyi = left;
+
+	while (left < right)
+	{
+		while (a[right] > a[keyi])
+			--right;
+		while (a[left] < a[keyi])
+			++left;
+		Swap(&a[right], &a[left]);
+	}
+	Swap(&a[right], &a[keyi]);*/
+
+
+	//错误做法2，left和right在移动过程中容易造成left < right的局面
+	//int keyi = left;
+	//++left;
+	//while (left < right)
+	//{
+	//	while (a[right] > a[keyi])
+	//		--right;
+	//	while (a[left] < a[keyi])
+	//		++left;
+	//	Swap(&a[right], &a[left]);
+	//}
+	//Swap(&a[right], &a[keyi]);
+
+	//错误做法3，似乎没什么大问题，已经交换成功了，但是换一种情况就失败了
+	//数组中有和关键值相等的两个数就会死循环，说明left加一并没有解决实际问题
+	//int keyi = left;
+	//++left;
+	//while (left < right)
+	//{
+	//	while (left < right &&a[right] > a[keyi])
+	//		--right;
+	//	while (left < right && a[left] < a[keyi])
+	//		++left;
+	//	Swap(&a[right], &a[left]);
+	//}
+	//Swap(&a[right], &a[keyi]);
+
+	//正确做法
+	//相等的值并不影响顺序
+	
+	//如果只是相等的话，当只有两个数时，关键值在正确位置，然后调用左边的数，调用右边的数会造成left > right
+	//if (left >= right)
+	//	return;
+	//int begin = left;
+	//int end = right;
+	//int keyi = left;
+	//while (left < right)
+	//{
+	//	while (left < right && a[right] >= a[keyi])
+	//		--right;
+	//	while (left < right && a[left] <= a[keyi])
+	//		++left;
+	//	Swap(&a[right], &a[left]);
+	//}
+	//Swap(&a[right], &a[keyi]);
+	//QuickSort(a, begin, left - 1);
+	//QuickSort(a, left + 1, end);
+
+	//优化:随机取值
+	//对于有序和倒序的情况，快排都是最坏情况，所以可以改良一下
+	//考虑递归右边的情况，所以要加left
+	if (left >= right)
+		return;
+	// 考虑右边的情况
+	//int randi = left + rand() % (right - left);
+	//Swap(&a[randi], &a[left]);
+
+	//三数取中：在left和right的和中取一半
+	int midi = GetMidNumi(a, left, right);
+	Swap(&a[midi], &a[left]);
+
+	int begin = left;
+	int end = right;
+	int keyi = left;
+	while (left < right)
+	{
+		while (left < right && a[right] >= a[keyi])
+			--right;
+		while (left < right && a[left] <= a[keyi])
+			++left;
+		Swap(&a[right], &a[left]);
+	}
+	Swap(&a[left], &a[keyi]);
+	keyi = left;
+	return keyi;
+}
