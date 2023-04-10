@@ -1,0 +1,31 @@
+//挖坑法
+//理解起来并不难，容易消化
+int QuickSort2(int* a, int left, int right)
+{
+	/*if (left >= right)
+		return;*/
+
+	int begin = left;
+	int end = right;
+	//三数取中：在left和right的和中取一半
+	int midi = GetMidNumi(a, left, right);
+	Swap(&a[midi], &a[left]);
+	
+	int key = a[left];
+	int hole = left;
+	while (left < right)
+	{
+		while (left < right && a[right] >= key)
+			--right;
+		Swap(&a[right], &a[hole]);
+		hole = right;
+
+		while (left < right && a[left] <= key)
+			++left;
+		Swap(&a[left], &a[hole]);
+		hole = left;
+	}
+	Swap(&key, &a[hole]);
+	hole = left;
+	return hole;
+}
