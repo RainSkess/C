@@ -1,0 +1,39 @@
+//前后指针版本
+int QuickSort3(int* a, int left, int right)
+{
+	//if (left >= right)
+	//	return;
+	int begin = left;
+	int end = right;
+	//三数取中：在left和right的和中取一半
+	int midi = GetMidNumi(a, left, right);
+	Swap(&a[midi], &a[left]);
+
+	int keyi = left;
+	int prev = left;
+	int cur = prev + 1;
+	//while (cur <= right)
+	//{
+	//	if (a[cur] <= key)
+	//	{
+	//		//a[++prev] = a[cur++];//这样只是覆盖，没有进行交换
+	//		Swap(&a[++prev], &a[cur++]);
+	//	}
+	//	else
+	//	{
+	//		cur++;
+	//	}
+	//}
+
+	//简化版，prev要么比cur后一个，要么落后很多个，不管cur遇到什么数，cur都要加1
+	while (cur <= right)
+	{
+		if (a[cur] <= a[keyi] && ++prev != cur)//等于就是不交唤
+			Swap(&a[prev], &a[cur]);
+		++cur;
+	}
+	//Swap(&a[prev], &key); 错误做法，把key交换了，但是数组中的值并没有交换
+	Swap(&a[prev], &a[left]);
+	keyi = prev;
+	return keyi;
+}
