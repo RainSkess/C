@@ -1,0 +1,35 @@
+
+//快速排序非递归
+//非递归的思想其实于递归差不多，就是要找到那个关键值，然后进行区间分割，直到只有一个值为止。
+void QuickSortNonR(int* a, int left, int right)
+{
+	ST st;
+	STInit(&st);
+	//首先将一个区间放入
+	STPush(&st, right);
+	STPush(&st, left);
+	//当栈中数据不为空时就代表还要排序
+	while (!STEmpty(&st))
+	{
+		//取出一个区间来排序，找出关键值
+		int begin = STTop(&st);
+		STPop(&st);
+		int end = STTop(&st);
+		STPop(&st);
+		int keyi = QuickSort3(a, begin, end);
+		//进行分割区间，将区间放入，注意顺序
+		//当只有一个数时就不用放入了，自己已经有序了
+		if (end > keyi)
+		{
+			STPush(&st, end);
+			STPush(&st, keyi + 1);
+		}
+		if (begin < keyi)
+		{
+			STPush(&st, keyi - 1);
+			STPush(&st, begin);
+		}
+	}
+	//及时销毁栈
+	STDestroy(&st);
+}
