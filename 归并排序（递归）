@@ -1,0 +1,49 @@
+//归并排序的子函数
+void _MergeSort(int* a, int left, int right, int* tmp)
+{
+	//当只有一个元素时，返回进行归并
+	if (left >= right)
+		return;
+	//进行分割区间
+	int midi = (left + right) / 2;
+	_MergeSort(a, left, midi, tmp);
+	_MergeSort(a, midi + 1, right, tmp);
+	//进行保存两个区间
+	int left1 = left, right1 = midi;
+	int left2 = midi + 1, right2 = right;
+	int i = left;
+	//进行归并，拷贝
+	while (left1 <= right1 && left2 <= right2)
+	{
+		if (a[left1] < a[left2])
+		{
+			tmp[i++] = a[left1++];
+		}
+		else
+		{
+			tmp[i++] = a[left2++];
+		}
+	}
+	//有一个区间的数已经放进了新的数组中，将剩下的数据放进去
+	while (left1 <= right1)
+		tmp[i++] = a[left1++];
+	while (left2 <= right2)
+		tmp[i++] = a[left2++];
+	//拷贝回去
+	memcpy(a + left, tmp + left, sizeof(int) * (right - left + 1));
+}
+
+
+//归并排序
+void MergeSort(int* a, int n)
+{
+	int* tmp = (int*)malloc(sizeof(int) * n);
+	if (tmp == NULL)
+	{
+		perror("malloc fail");
+		return;
+	}
+	_MergeSort(a, 0, n - 1, tmp);
+	//空间释放
+	free(tmp);
+}
