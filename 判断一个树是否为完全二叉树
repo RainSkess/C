@@ -1,0 +1,43 @@
+//判断一个树是否为完全二叉树
+int BinaryTreeComplete(BTNode* root)
+{
+	Queue p;
+	QueueInit(&p);
+	//如果根不为空，那么就可以插入根
+	if (root)
+		QueuePush(&p, root);
+	while (!QueueEmpty(&p))
+	{
+
+		BTNode* tmp = QueueFront(&p);
+		QueuePop(&p);
+		//当遇到tmp为空时，就可以跳出循环，进行判断了
+		if (tmp == NULL)
+		{
+			break;
+		}
+		else
+		{
+			//左子树不为空就进去
+			if (tmp->left)
+				QueuePush(&p, tmp->left);
+			//右子树不为空就进去
+			if (tmp->right)
+				QueuePush(&p, tmp->right);
+		}
+	}
+	//判断是否为完全二叉树
+	while (!QueueEmpty(&p))
+	{
+		BTNode* tmp = QueueFront(&p);
+		QueuePop(&p);
+		//有一个结点不为空代表不是完全二叉树
+		if (tmp)
+		{
+			QueueDestroy(&p);
+			return 0;
+		}
+	}
+	QueueDestroy(&p);
+	return 1;
+}
