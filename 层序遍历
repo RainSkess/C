@@ -1,0 +1,26 @@
+//层序遍历：利用队列来实现。
+//首先进一个根，然后进左右子树，把根删除。然后再进左子树的左右子树，然后删除左子树。
+//然后再进右子树的左右子树，然后删除右子树。以此类推，直到队列为空
+void LevelTree(BTNode* root)
+{
+	Queue q;
+	QueueInit(&q);
+	//如果根不为空，那么就可以插入根
+	if (root)
+		QueuePush(&q, root);
+	while (!QueueEmpty(&q))
+	{
+		
+		BTNode* tmp = QueueFront(&q);
+		QueuePop(&q);
+		printf("%d ", tmp->data);
+		//左子树不为空就进去
+		if (tmp->left)
+			QueuePush(&q, tmp->left);
+		//右子树不为空就进去
+		if (tmp->right)
+			QueuePush(&q, tmp->right);
+		
+	}
+	QueueDestroy(&q);
+}
